@@ -83,12 +83,17 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
           </div>
 
           <div>
-            <Label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Password
+              </Label>
+              <Link href="/forgot-password" className="text-xs underline">
+                forgot password?
+              </Link>
+            </div>
             <div className="mt-1">
               <Input
                 id="password"
@@ -148,6 +153,29 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
               ) : (
                 "Sign up"
               )}
+            </Button>
+
+            <Button
+              onClick={async () => {
+                await authClient.signIn.social({
+                  provider: "google",
+                  callbackURL: "/dashboard",
+                });
+              }}
+              className="w-full mt-2 flex justify-center items-center py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white gap-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1.2em"
+                height="1.2em"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M11.99 13.9v-3.72h9.36c.14.63.25 1.22.25 2.05c0 5.71-3.83 9.77-9.6 9.77c-5.52 0-10-4.48-10-10S6.48 2 12 2c2.7 0 4.96.99 6.69 2.61l-2.84 2.76c-.72-.68-1.98-1.48-3.85-1.48c-3.31 0-6.01 2.75-6.01 6.12s2.7 6.12 6.01 6.12c3.83 0 5.24-2.65 5.5-4.22h-5.51z"
+                ></path>
+              </svg>
+              Continue with Google
             </Button>
           </div>
         </div>

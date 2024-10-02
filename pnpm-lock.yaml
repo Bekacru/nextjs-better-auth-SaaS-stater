@@ -51,8 +51,8 @@ dependencies:
     specifier: ^2.4.3
     version: 2.4.3
   better-auth:
-    specifier: 0.2.8
-    version: 0.2.8(@babel/core@7.25.2)(react@19.0.0-rc-7771d3a7-20240827)(solid-js@1.9.1)(vue@3.5.10)
+    specifier: 0.2.9-beta.1
+    version: 0.2.9-beta.1(@babel/core@7.25.2)(react@19.0.0-rc-7771d3a7-20240827)(solid-js@1.9.1)(vue@3.5.10)
   better-call:
     specifier: 0.2.3-beta.10
     version: 0.2.3-beta.10
@@ -2807,8 +2807,8 @@ packages:
     resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
     dev: false
 
-  /better-auth@0.2.8(@babel/core@7.25.2)(react@19.0.0-rc-7771d3a7-20240827)(solid-js@1.9.1)(vue@3.5.10):
-    resolution: {integrity: sha512-eXnyp9sDkkcTAk6P7oSAFZvN4wiM4yyyQHirRTyVEipn2Bmsra150uHdfMXvXL3930UMB1tVd4V+IQuAQq/IMw==}
+  /better-auth@0.2.9-beta.1(@babel/core@7.25.2)(react@19.0.0-rc-7771d3a7-20240827)(solid-js@1.9.1)(vue@3.5.10):
+    resolution: {integrity: sha512-++/ivkNJFQzcf046C5sjerfRkAluampW8UUfYiTHYXHwyNTRuf1S0m+mBmHx2FPSbPvolpJg7wL4XPR9w4qqRg==}
     hasBin: true
     dependencies:
       '@antfu/ni': 0.23.0

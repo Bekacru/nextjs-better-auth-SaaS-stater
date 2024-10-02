@@ -10,21 +10,32 @@ export const auth = betterAuth({
     provider: "pg",
     usePlural: true,
   }),
-
   emailAndPassword: {
     enabled: true,
+    async sendResetPassword(url, user) {
+      console.log(
+        "Sending reset password email to",
+        user.email,
+        "with url",
+        url
+      );
+    },
   },
-  logger: {
-    verboseLogging: true,
-  },
+
   plugins: [
     organization({
       async sendInvitationEmail(data) {
-        console.log(data);
+        console.log("Sending invitation email to", data.email);
       },
       allowUserToCreateOrganization: false,
     }),
   ],
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
+  },
   databaseHooks: {
     user: {
       create: {

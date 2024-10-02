@@ -27,7 +27,7 @@
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.20",
     "bcryptjs": "^2.4.3",
-    "better-auth": "0.2.8",
+    "better-auth": "0.2.9-beta.1",
     "better-call": "0.2.3-beta.10",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
