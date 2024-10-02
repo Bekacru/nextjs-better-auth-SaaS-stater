@@ -6,14 +6,10 @@ Changes the authentication to [better-auth](https://better-auth.com)
 
 - Google OAuth
 - Password Reset
-- Session Management
+- Session Management and more...
 
-### Implements
+### To be Implemented
 
-- Email And Password auth
-- Social OAuth
-- Uses Better Auth Organization Plugin
-- Forget Password
-- Session Management
-- Change Password
-- User Deletion
+- [ ] two factor
+- [ ] Passkeys
+- [ ] handling accept invitation
