@@ -1,19 +1,22 @@
-import { redirect } from 'next/navigation';
-import { Settings } from './settings';
-import { getTeamForUser, getUser } from '@/lib/db/queries';
+import { auth } from "@/lib/auth";
+import { Settings } from "./settings";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function SettingsPage() {
-  const user = await getUser();
-
-  if (!user) {
-    redirect('/login');
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+  if (!session) {
+    throw redirect("/sign-in");
   }
-
-  const teamData = await getTeamForUser(user.id);
-
-  if (!teamData) {
-    throw new Error('Team not found');
+  if (!session.session.activeOrganizationId) {
+    await auth.api.setActiveOrganization({
+      headers: headers(),
+      body: {
+        orgId: session.user.id,
+      },
+    });
   }
-
-  return <Settings teamData={teamData} />;
+  return <Settings />;
 }

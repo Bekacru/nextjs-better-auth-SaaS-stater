@@ -1,73 +1,78 @@
-import { stripe } from '../payments/stripe';
-import { db } from './drizzle';
-import { users, teams, teamMembers } from './schema';
-import { hashPassword } from '@/lib/auth/session';
+import { nanoid } from "nanoid";
+import { auth } from "../auth";
+import { stripe } from "../payments/stripe";
+import { db } from "./drizzle";
+import { organizations, members } from "./schema";
 
 async function createStripeProducts() {
-  console.log('Creating Stripe products and prices...');
+  console.log("Creating Stripe products and prices...");
 
   const baseProduct = await stripe.products.create({
-    name: 'Base',
-    description: 'Base subscription plan',
+    name: "Base",
+    description: "Base subscription plan",
   });
 
   await stripe.prices.create({
     product: baseProduct.id,
     unit_amount: 800, // $8 in cents
-    currency: 'usd',
+    currency: "usd",
     recurring: {
-      interval: 'month',
+      interval: "month",
       trial_period_days: 7,
     },
   });
 
   const plusProduct = await stripe.products.create({
-    name: 'Plus',
-    description: 'Plus subscription plan',
+    name: "Plus",
+    description: "Plus subscription plan",
   });
 
   await stripe.prices.create({
     product: plusProduct.id,
     unit_amount: 1200, // $12 in cents
-    currency: 'usd',
+    currency: "usd",
     recurring: {
-      interval: 'month',
+      interval: "month",
       trial_period_days: 7,
     },
   });
 
-  console.log('Stripe products and prices created successfully.');
+  console.log("Stripe products and prices created successfully.");
 }
 
 async function seed() {
-  const email = 'test@test.com';
-  const password = 'admin123';
-  const passwordHash = await hashPassword(password);
+  const email = "test@test.com";
+  const password = "admin123";
 
-  const [user] = await db
-    .insert(users)
-    .values([
-      {
-        email: email,
-        passwordHash: passwordHash,
-        role: "owner",
-      },
-    ])
-    .returning();
-
-  console.log('Initial user created.');
+  const data = await auth.api.signUpEmail({
+    body: {
+      email,
+      password,
+      name: "Test User",
+    },
+  });
+  if (!data) {
+    throw new Error("Failed to create user");
+  }
 
   const [team] = await db
-    .insert(teams)
+    .insert(organizations)
     .values({
-      name: 'Test Team',
+      id: nanoid(),
+      name: "Test Team",
+      slug: "test-team",
+      createdAt: new Date(),
+      updatedAt: new Date(),
     })
     .returning();
 
-  await db.insert(teamMembers).values({
-    teamId: team.id,
-    userId: user.id,
-    role: 'owner',
+  await db.insert(members).values({
+    id: nanoid(),
+    organizationId: team.id,
+    userId: data.user.id,
+    createdAt: new Date(),
+    role: "owner",
+    email: data.user.email,
   });
 
   await createStripeProducts();
@@ -75,10 +80,10 @@ async function seed() {
 
 seed()
   .catch((error) => {
-    console.error('Seed process failed:', error);
+    console.error("Seed process failed:", error);
     process.exit(1);
   })
   .finally(() => {
-    console.log('Seed process finished. Exiting...');
+    console.log("Seed process finished. Exiting...");
     process.exit(0);
   });
