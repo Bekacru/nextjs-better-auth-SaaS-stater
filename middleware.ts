@@ -1,22 +1,24 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { signToken, verifyToken } from "@/lib/auth/session";
-import { authMiddleware } from "better-auth/next-js";
-const protectedRoutes = "/dashboard";
+import { createAuthClient } from "better-auth/client";
+import { NextRequest, NextResponse } from "next/server";
 
-export default authMiddleware({
-	customRedirect: async (session, request) => {
-		const pathname = request.nextUrl.pathname;
-		const isProtectedRoute = pathname.startsWith(protectedRoutes);
-		if (isProtectedRoute && !session) {
-			return NextResponse.redirect(
-				new URL(`${request.nextUrl.origin}/sign-in`),
-			);
+const client = createAuthClient()
+
+export async function middleware(request: NextRequest) {
+	const { data: session } = await client.getSession(
+		{
+			fetchOptions: {
+				headers: {
+					cookie: request.headers.get("cookie") || "",
+				},
+			}
 		}
-		return NextResponse.next();
-	},
-});
+	);
+	if (!session) {
+		return NextResponse.redirect(new URL("/", request.url));
+	}
+	return NextResponse.next();
+}
 
 export const config = {
-	matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+	matcher: ["/dashboard"],
 };
